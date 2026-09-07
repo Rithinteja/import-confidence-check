@@ -112,8 +112,8 @@ export default function CreateTablePage() {
         </p>
         <p className="drop-meta">Upload up to 10 files (max total upload size 10MB in this prototype)</p>
         <p className="drop-meta">
-          Supported file formats: CSV, TSV, JSON, or Excel. Any valid test file works — parsing and
-          Import Confidence Check run on the uploaded values. Groq powers optional AI explanations.
+          Supported file formats: CSV, TSV, JSON, or Excel. Any valid test file works. Parsing and
+          Import Confidence Check run on the uploaded values. Groq can add short AI explanations.
         </p>
         <input
           ref={inputRef}
@@ -127,15 +127,15 @@ export default function CreateTablePage() {
       {error ? <div className="error-banner">{error}</div> : null}
 
       <p className="volume-note">
-        For larger files or non-tabular datasets, upload to a Volume in Unity Catalog. Not wired in
-        this prototype.
+        For larger files or non-tabular datasets, upload to a Volume in Unity Catalog. That path is
+        not in this prototype.
       </p>
 
       <section className="samples">
         <div className="section-title-row">
           <div>
             <h2>Try a sample file</h2>
-            <p>Same engine as browse/drag-and-drop — results are computed, not hardcoded.</p>
+            <p>Same engine as browse or drag-and-drop. Results are scanned live, not hardcoded.</p>
           </div>
         </div>
         <div className="sample-list">
@@ -145,20 +145,31 @@ export default function CreateTablePage() {
               const filename = String(sample.filename ?? "");
               const name = String(sample.label ?? filename);
               return (
-                <button
-                  disabled={busy}
-                  className="sample-row"
-                  key={id}
-                  type="button"
-                  onClick={() => void chooseSample(id)}
-                >
+                <div className="sample-row" key={id}>
                   <span className="file-type">{fileBadge(filename)}</span>
                   <span>
                     <strong>{name}</strong>
                     <small>{String(sample.description ?? "")}</small>
                   </span>
-                  <span className="sample-action">Use sample</span>
-                </button>
+                  <span className="sample-actions">
+                    <a
+                      className="sample-download"
+                      href={api.sampleFileUrl(id)}
+                      download={filename || undefined}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      Download
+                    </a>
+                    <button
+                      disabled={busy}
+                      className="sample-action"
+                      type="button"
+                      onClick={() => void chooseSample(id)}
+                    >
+                      Use sample
+                    </button>
+                  </span>
+                </div>
               );
             })
           ) : (

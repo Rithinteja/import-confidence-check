@@ -74,6 +74,8 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 
 export const api = {
   samples: () => request<Array<Record<string, unknown>>>("/api/samples"),
+  sampleFileUrl: (id: string) =>
+    `${API_BASE}/api/samples/${encodeURIComponent(id)}/file`,
   upload: (file: File) => {
     const body = new FormData();
     body.append("file", file);

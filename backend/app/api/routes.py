@@ -97,7 +97,11 @@ def download_sample(sample_id: str) -> FileResponse:
     path = FIXTURES_DIR / meta.filename
     if not path.exists():
         raise HTTPException(404, "Fixture missing")
-    return FileResponse(path, filename=meta.filename)
+    return FileResponse(
+        path,
+        filename=meta.filename,
+        content_disposition_type="attachment",
+    )
 
 
 @router.post("/import/upload", response_model=ImportSessionResponse)

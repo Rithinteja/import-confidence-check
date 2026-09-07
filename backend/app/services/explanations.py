@@ -100,7 +100,7 @@ def fallback_ask(question: str, unresolved: list[str], resolved: list[str]) -> s
         )
     if "string" in q:
         return (
-            "String is recommended when the source text must be preserved exactly — "
+            "String is recommended when the source text must be preserved exactly, "
             "especially IDs, postal codes, and values that only look numeric."
         )
     return (

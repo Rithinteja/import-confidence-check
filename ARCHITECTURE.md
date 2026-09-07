@@ -21,10 +21,10 @@
 7. **Comparison:** For each cell, `convert_value(original, proposed_type)` then compare meaning (leading zeros, Decimal equality, nulls, collisions).
 8. **Large files:** Soft 10MB limit; scan is synchronous on server for prototype scale; UI shows loading while request runs. Preview always first 50 rows.
 9. **Local run:** `uvicorn` on :8000 + `next dev` on :3000.
-10. **Databricks App?** Yes, FastAPI is a first-class Databricks Apps pattern. Include `app.yaml` with `uvicorn` listening on `DATABRICKS_APP_PORT`. Serve built frontend as static files from FastAPI or run a Node start command — for interview, local/Vercel is enough.
+10. **Databricks App?** Yes, FastAPI is a first-class Databricks Apps pattern. Include `app.yaml` with `uvicorn` listening on `DATABRICKS_APP_PORT`. Serve built frontend as static files from FastAPI or run a Node start command. For interview, local/Vercel is enough.
 11. **Databricks hosting changes:** Bundle frontend build into app, set secrets via Apps env, bind `0.0.0.0:$DATABRICKS_APP_PORT`, no localhost CORS.
 12. **Easier public host for interview:** Frontend on Vercel + backend on Render/Railway/Fly. Fastest path for a reviewer link.
-13. **Does Groq add value?** Yes for plain-language explanations and Q&A — not for detection.
+13. **Does Groq add value?** Yes for plain-language explanations and Q&A, not for detection.
 14. **Always deterministic:** risk categories, counts, original/converted examples, recommended types, outside-preview flags.
 15. **Security/privacy:** No persistent file storage; no raw logs of cell values; Groq gets masked structured summaries only; API key server-side; validate extensions; size limit; app labeled concept prototype.
 

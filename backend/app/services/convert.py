@@ -121,7 +121,7 @@ def _as_timestamp(text: str) -> Optional[str]:
     v = text.strip()
     if _INT_RE.match(v) and len(v) >= 5:
         # Identifier-like numbers should not become timestamps; return a fake conversion
-        # only if inference chose timestamp — mark as converted epoch-ish string
+        # only if inference chose timestamp; mark as converted epoch-ish string
         return None
     if _TS_RE.match(v):
         return v.replace("T", " ")

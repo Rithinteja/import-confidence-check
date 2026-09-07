@@ -119,7 +119,7 @@ function CatalogContent() {
                         <td>
                           <span className="type-chip">{text(column.type)}</span>
                         </td>
-                        <td className="muted">—</td>
+                        <td className="muted">-</td>
                       </tr>
                     ))}
                   </tbody>
@@ -192,7 +192,7 @@ function CatalogContent() {
                 <dt>Full name</dt>
                 <dd>{path}</dd>
                 <dt>Table ID</dt>
-                <dd>{text(created?.table_id ?? created?.id ?? "—")}</dd>
+                <dd>{text(created?.table_id ?? created?.id ?? "-")}</dd>
                 <dt>Created at</dt>
                 <dd>{text(created?.created_at ?? "Just now")}</dd>
                 <dt>Created by</dt>

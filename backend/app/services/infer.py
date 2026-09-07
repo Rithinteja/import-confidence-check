@@ -33,7 +33,7 @@ def _infer_one(name: str, values: list[str]) -> ColumnSchema:
         return ColumnSchema(name=name, type=ColumnType.STRING)
 
     lower_name = name.lower()
-    # Prefer identifier-like columns with leading zeros as numeric if all digits —
+    # Prefer identifier-like columns with leading zeros as numeric if all digits;
     # that mirrors Databricks over-eager inference (the risk we detect).
     if all(_INT_RE.match(v.strip()) for v in samples):
         max_abs = max(abs(int(v.strip())) for v in samples)

@@ -43,7 +43,7 @@ _SessionLocal: Optional[sessionmaker] = None
 
 
 def _normalize_url(url: str) -> str:
-    # Neon / Render often provide postgres:// — SQLAlchemy wants postgresql+psycopg://
+    # Neon / Render often provide postgres:// ; SQLAlchemy wants postgresql+psycopg://
     if url.startswith("postgres://"):
         url = "postgresql+psycopg://" + url[len("postgres://") :]
     elif url.startswith("postgresql://") and "+psycopg" not in url:

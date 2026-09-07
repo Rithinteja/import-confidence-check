@@ -34,7 +34,7 @@ Anyone with the link can use it (no login).
 
 ### Notes
 
-- Free Render services **sleep after idle**; first request can take ~30–60s to wake.
+- Free Render services **sleep after idle**; first request can take about 30-60s to wake.
 - Without `DATABASE_URL`, the app still runs on local SQLite inside the container (data is lost on redeploy). Neon keeps data across restarts.
 
 ## 3. Local production-like check

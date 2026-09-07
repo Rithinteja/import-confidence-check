@@ -86,7 +86,7 @@ def _scan_column(
                 ColumnType.INTEGER,
                 ColumnType.BIGINT,
             }:
-                # leading-zero path converts successfully to int — not null
+                # leading-zero path converts successfully to int, not null
                 pass
             out.append(g)
 
