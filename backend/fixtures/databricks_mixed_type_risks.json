@@ -1,0 +1,7 @@
+[
+  {"customer_id":"000123","order_date":"2026-01-05","amount":19.99,"status":"paid"},
+  {"customer_id":"000124","order_date":"not-a-date","amount":"20.23","status":"pending"},
+  {"customer_id":"000125","order_date":"2026-03-11","amount":42.5,"status":"paid"},
+  {"customer_id":"000126","order_date":"2026-04-02","amount":"unknown","status":"refunded"},
+  {"customer_id":"000127","order_date":"2026-05-01","amount":null,"status":"pending"}
+]

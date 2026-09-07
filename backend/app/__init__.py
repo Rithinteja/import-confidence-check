@@ -1,0 +1,1 @@
+"""Import Confidence Check FastAPI application."""
