@@ -7,26 +7,20 @@ import { useEffect, useState, type ReactNode } from "react";
 type NavItem = { label: string; href: string };
 
 const navItems: NavItem[] = [
-  { label: "Home", href: "/" },
+  { label: "Home", href: "/readme" },
   { label: "Catalog", href: "/catalog" },
   { label: "Data Ingestion", href: "/" },
-  { label: "README", href: "/readme" },
 ];
 
 function isActive(pathname: string, item: NavItem): boolean {
+  if (item.label === "Home") return pathname.startsWith("/readme");
   if (item.label === "Catalog") return pathname.startsWith("/catalog");
-  if (item.label === "README") return pathname.startsWith("/readme");
   if (item.label === "Data Ingestion") {
     return (
-      !pathname.startsWith("/catalog") &&
-      !pathname.startsWith("/readme") &&
-      (pathname === "/" ||
-        pathname.startsWith("/create-table") ||
-        pathname.startsWith("/add-data"))
+      pathname === "/" ||
+      pathname.startsWith("/create-table") ||
+      pathname.startsWith("/add-data")
     );
-  }
-  if (item.label === "Home") {
-    return pathname === "/" || pathname.startsWith("/add-data");
   }
   return pathname === item.href;
 }
@@ -34,10 +28,13 @@ function isActive(pathname: string, item: NavItem): boolean {
 export default function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [motionReady, setMotionReady] = useState(false);
 
   useEffect(() => {
     const saved = window.localStorage.getItem("sidebar-open");
     if (saved === "0") setSidebarOpen(false);
+    const id = window.requestAnimationFrame(() => setMotionReady(true));
+    return () => window.cancelAnimationFrame(id);
   }, []);
 
   function toggleSidebar() {
@@ -49,7 +46,15 @@ export default function AppShell({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className={`app-shell ${sidebarOpen ? "" : "sidebar-collapsed"}`}>
+    <div
+      className={[
+        "app-shell",
+        sidebarOpen ? "" : "sidebar-collapsed",
+        motionReady ? "sidebar-motion" : "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
+    >
       <header className="topbar">
         <button
           className="sidebar-toggle"
@@ -72,7 +77,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
             <path d="M5.5 2.5v11" fill="none" stroke="currentColor" strokeWidth="1.25" />
           </svg>
         </button>
-        <Link className="brand" href="/">
+        <Link className="brand" href="/readme">
           <svg viewBox="0 0 34 34" aria-hidden="true">
             <path d="M17 2 31 10 17 18 3 10 17 2Z" fill="#ff3621" />
             <path

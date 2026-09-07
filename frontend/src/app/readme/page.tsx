@@ -5,7 +5,7 @@ export default function ReadmePage() {
     <div className="page-content readme-page">
       <header className="page-heading">
         <div>
-          <h1>README</h1>
+          <h1>Home</h1>
           <p>What this Import Confidence Check prototype does, and how to try it.</p>
         </div>
       </header>
@@ -22,7 +22,7 @@ export default function ReadmePage() {
         <h2>How to use the site</h2>
         <ol className="readme-steps">
           <li>
-            Open <Link href="/">Home / Data Ingestion</Link> and choose{" "}
+            Open <Link href="/">Data Ingestion</Link> and choose{" "}
             <Link href="/create-table">Create or modify table</Link>.
           </li>
           <li>
