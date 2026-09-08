@@ -41,16 +41,36 @@ export default function ReadmePage() {
         <h2 id="howto-heading">How to use</h2>
         <ol className="readme-steps">
           <li>
-            Open <Link href="/">Data Ingestion</Link>, then{" "}
-            <Link href="/create-table">Create or modify table</Link>.
+            <span className="readme-step-num" aria-hidden="true">
+              1
+            </span>
+            <span>
+              Open <Link href="/">Data Ingestion</Link>, then{" "}
+              <Link href="/create-table">Create or modify table</Link>.
+            </span>
           </li>
           <li>
-            Upload a test CSV, TSV, JSON, or Excel file, or pick a sample with{" "}
-            <strong>Try this file</strong>.
+            <span className="readme-step-num" aria-hidden="true">
+              2
+            </span>
+            <span>
+              Upload a test CSV, TSV, JSON, or Excel file, or pick a sample with{" "}
+              <strong>Try this file</strong>.
+            </span>
           </li>
-          <li>Review risks, apply fixes if you want, then create the table.</li>
           <li>
-            Open <Link href="/catalog">Catalog</Link> to see tables from this session.
+            <span className="readme-step-num" aria-hidden="true">
+              3
+            </span>
+            <span>Review risks, apply fixes if you want, then create the table.</span>
+          </li>
+          <li>
+            <span className="readme-step-num" aria-hidden="true">
+              4
+            </span>
+            <span>
+              Open <Link href="/catalog">Catalog</Link> to see tables from this session.
+            </span>
           </li>
         </ol>
         <p className="readme-footnote">
