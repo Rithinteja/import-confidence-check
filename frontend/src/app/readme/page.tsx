@@ -18,6 +18,25 @@ export default function ReadmePage() {
         </span>
       </div>
 
+      <section className="readme-section demo-cta-card">
+        <h2>Recommended first</h2>
+        <p>
+          The preview shows the first 50 rows. This 75-row sample looks clean in the grid, then
+          Import Confidence Check finds risks starting at row 51. One click loads it.
+        </p>
+        <p className="demo-cta-actions">
+          <Link
+            className="primary-button"
+            href="/create-table/?sample=after-preview"
+          >
+            Try the 75-row sample
+          </Link>
+          <Link className="secondary-button" href="/create-table/">
+            Browse all samples
+          </Link>
+        </p>
+      </section>
+
       <section className="readme-section">
         <h2>How to use the site</h2>
         <ol className="readme-steps">
@@ -62,20 +81,6 @@ export default function ReadmePage() {
             Detection still runs if Groq is down; the UI falls back to built-in text.
           </li>
         </ul>
-      </section>
-
-      <section className="readme-section">
-        <h2>Quick demo</h2>
-        <p>
-          Start with <strong>Risks after preview row 50</strong>. The first 50 rows look fine, then
-          Confidence Check flags problems later in the file. Next, try a leading-zero sample, keep
-          the column as String, and check Catalog → Sample Data.
-        </p>
-        <p>
-          <Link className="primary-button" href="/create-table">
-            Go to Create table from file
-          </Link>
-        </p>
       </section>
     </div>
   );

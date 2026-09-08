@@ -562,8 +562,50 @@ section h2,
   border-radius: 2px;
 }
 
+.sample-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  min-width: 0;
+}
+
+.sample-title {
+  display: block;
+  font-weight: 650;
+  color: var(--dbx-text);
+  line-height: 1.3;
+}
+
+.sample-desc {
+  display: block;
+  color: var(--dbx-muted);
+  line-height: 1.35;
+}
+
 .sample-row:hover {
   border-color: #9db7ea;
+}
+
+.sample-row-featured {
+  border-color: var(--dbx-border);
+  border-left: 3px solid var(--dbx-blue);
+  background: #fff;
+  padding-left: 12px;
+}
+
+.sample-row-featured .sample-desc {
+  color: var(--dbx-secondary);
+}
+
+.sample-action-primary {
+  background: var(--dbx-blue);
+  border-color: var(--dbx-blue);
+  color: #fff;
+}
+
+.sample-action-primary:hover:not(:disabled) {
+  filter: brightness(0.96);
 }
 
 .sample-actions {
@@ -599,6 +641,21 @@ section h2,
   cursor: not-allowed;
 }
 
+.readme-page {
+  max-width: 720px;
+}
+
+.readme-page .page-heading,
+.readme-page .readme-banner,
+.readme-page .readme-section {
+  width: 100%;
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
 .readme-banner {
   display: grid;
   gap: 6px;
@@ -608,11 +665,40 @@ section h2,
   background: #fff8eb;
   border-radius: 2px;
   color: var(--dbx-secondary);
+  box-sizing: border-box;
+}
+
+.demo-cta-card {
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+
+.demo-cta-card h2 {
+  margin-top: 0;
+}
+
+.demo-cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin: 12px 0 0;
+}
+
+.demo-cta-actions .primary-button,
+.demo-cta-actions .secondary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  margin: 0;
+  box-sizing: border-box;
+  line-height: 1.2;
 }
 
 .readme-section {
   margin-bottom: 28px;
-  max-width: 720px;
 }
 
 .readme-section h2 {
@@ -620,12 +706,21 @@ section h2,
   font-size: 18px;
 }
 
+.readme-section > p {
+  margin: 0 0 12px;
+}
+
 .readme-steps,
 .readme-list {
   margin: 0;
-  padding-left: 20px;
+  padding-left: 1.25rem;
   display: grid;
   gap: 10px;
+}
+
+.readme-steps li,
+.readme-list li {
+  padding-left: 0.25rem;
 }
 
 .readme-section code {
@@ -634,11 +729,6 @@ section h2,
   border: 1px solid var(--dbx-border);
   border-radius: 2px;
   padding: 1px 5px;
-}
-
-.readme-section .primary-button {
-  display: inline-flex;
-  margin-top: 8px;
 }
 
 .file-type {

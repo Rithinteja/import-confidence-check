@@ -2,10 +2,12 @@
 
 import { api } from "@/lib/api";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { DragEvent, useEffect, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { DragEvent, Suspense, useEffect, useRef, useState } from "react";
 
 type Sample = Record<string, unknown>;
+
+const FEATURED_SAMPLE_ID = "after-preview";
 
 function fileBadge(filename: string): string {
   const ext = filename.split(".").pop()?.toUpperCase() || "FILE";
@@ -15,13 +17,16 @@ function fileBadge(filename: string): string {
   return "CSV";
 }
 
-export default function CreateTablePage() {
+function CreateTableContent() {
   const router = useRouter();
+  const search = useSearchParams();
   const inputRef = useRef<HTMLInputElement>(null);
+  const autoSample = search.get("sample");
   const [samples, setSamples] = useState<Sample[]>([]);
   const [busy, setBusy] = useState(false);
   const [dragging, setDragging] = useState(false);
   const [error, setError] = useState("");
+  const autoStarted = useRef(false);
 
   useEffect(() => {
     api.samples().then(setSamples).catch(() => setSamples([]));
@@ -53,11 +58,27 @@ export default function CreateTablePage() {
     }
   }
 
+  useEffect(() => {
+    if (!autoSample || autoStarted.current) return;
+    autoStarted.current = true;
+    void chooseSample(autoSample);
+    // intentionally once on mount for ?sample=
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoSample]);
+
   function drop(e: DragEvent) {
     e.preventDefault();
     setDragging(false);
     void upload(e.dataTransfer.files[0]);
   }
+
+  const orderedSamples = [...samples].sort((a, b) => {
+    const aId = String(a.id ?? "");
+    const bId = String(b.id ?? "");
+    if (aId === FEATURED_SAMPLE_ID) return -1;
+    if (bId === FEATURED_SAMPLE_ID) return 1;
+    return 0;
+  });
 
   return (
     <div className="page-content upload-page dbx-upload">
@@ -139,17 +160,18 @@ export default function CreateTablePage() {
           </div>
         </div>
         <div className="sample-list">
-          {samples.length ? (
-            samples.map((sample, i) => {
+          {orderedSamples.length ? (
+            orderedSamples.map((sample, i) => {
               const id = String(sample.id ?? i);
               const filename = String(sample.filename ?? "");
               const name = String(sample.label ?? filename);
+              const featured = id === FEATURED_SAMPLE_ID;
               return (
-                <div className="sample-row" key={id}>
+                <div className={`sample-row ${featured ? "sample-row-featured" : ""}`} key={id}>
                   <span className="file-type">{fileBadge(filename)}</span>
-                  <span>
-                    <strong>{name}</strong>
-                    <small>{String(sample.description ?? "")}</small>
+                  <span className="sample-copy">
+                    <strong className="sample-title">{name}</strong>
+                    <small className="sample-desc">{String(sample.description ?? "")}</small>
                   </span>
                   <span className="sample-actions">
                     <a
@@ -162,11 +184,11 @@ export default function CreateTablePage() {
                     </a>
                     <button
                       disabled={busy}
-                      className="sample-action"
+                      className={`sample-action ${featured ? "sample-action-primary" : ""}`}
                       type="button"
                       onClick={() => void chooseSample(id)}
                     >
-                      Use sample
+                      {featured ? "Try this file" : "Use sample"}
                     </button>
                   </span>
                 </div>
@@ -178,5 +200,13 @@ export default function CreateTablePage() {
         </div>
       </section>
     </div>
+  );
+}
+
+export default function CreateTablePage() {
+  return (
+    <Suspense fallback={<div className="page-content loading-state">Loading…</div>}>
+      <CreateTableContent />
+    </Suspense>
   );
 }

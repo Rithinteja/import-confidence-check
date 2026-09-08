@@ -25,16 +25,16 @@ router = APIRouter()
 
 SAMPLES: list[SampleFileInfo] = [
     SampleFileInfo(
+        id="after-preview",
+        label="Risks after preview (75 rows)",
+        filename="databricks_preview_50_row_limit_test.csv",
+        description="Recommended first. Preview shows 50 clean rows; risks start at row 51+.",
+    ),
+    SampleFileInfo(
         id="leading-zero",
         label="Leading-zero and conversion risks",
         filename="conversion_edge_cases.csv",
         description="Customer IDs, postal codes, rounding, invalid dates",
-    ),
-    SampleFileInfo(
-        id="after-preview",
-        label="Risks after preview row 50",
-        filename="databricks_preview_50_row_limit_test.csv",
-        description="75 rows; risks begin after the visible preview",
     ),
     SampleFileInfo(
         id="excel",
