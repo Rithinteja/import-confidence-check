@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from typing import Any
 
 import httpx
@@ -8,6 +9,14 @@ import httpx
 from app.config import Settings
 from app.models import GroqTextResponse, ImportRisk
 from app.services.explanations import fallback_ask, fallback_explain, fallback_summary
+
+
+_COUNT_COLUMN_GAP = re.compile(r"(?<=\d)(?=[A-Za-z_])")
+
+
+def _clean_ai_text(text: str) -> str:
+    # Models sometimes emit "2customer_id"; keep a space before column-like names.
+    return _COUNT_COLUMN_GAP.sub(" ", text.strip())
 
 
 async def explain_risk(settings: Settings, risk: ImportRisk, column_role: str = "") -> GroqTextResponse:
@@ -28,13 +37,14 @@ async def explain_risk(settings: Settings, risk: ImportRisk, column_role: str = 
     prompt = (
         "Rewrite this Databricks import risk for a busy analyst. "
         "Use at most 2 short plain sentences. No buzzwords. "
-        "Say what changes, why it matters, and the fix. Do not invent risks or change counts.\n"
+        "Say what changes, why it matters, and the fix. Do not invent risks or change counts. "
+        "Always put a space between a count and a column name (write '2 customer_id', never '2customer_id').\n"
         f"DATA: {json.dumps(payload)}"
     )
     text = await _chat(settings, prompt)
     if not text:
         return GroqTextResponse(text=fallback, source="fallback", ai_available=False)
-    return GroqTextResponse(text=text.strip(), source="groq", ai_available=True)
+    return GroqTextResponse(text=_clean_ai_text(text), source="groq", ai_available=True)
 
 
 async def import_summary(
@@ -66,13 +76,14 @@ async def import_summary(
     prompt = (
         "Summarize this import scan in plain English. "
         "Return 3 to 6 short lines. Prefer a short intro line, then bullet lines starting with '- '. "
-        "Name columns and counts from the data only. No jargon stacks. Do not invent risks.\n"
+        "Name columns and counts from the data only. No jargon stacks. Do not invent risks. "
+        "Always put a space between a count and a column name (write '2 customer_id', never '2customer_id').\n"
         f"DATA: {json.dumps(payload)}"
     )
     text = await _chat(settings, prompt)
     if not text:
         return GroqTextResponse(text=fallback, source="fallback", ai_available=False)
-    return GroqTextResponse(text=text.strip(), source="groq", ai_available=True)
+    return GroqTextResponse(text=_clean_ai_text(text), source="groq", ai_available=True)
 
 
 async def ask(settings: Settings, question: str, context: dict[str, Any]) -> GroqTextResponse:
@@ -90,7 +101,7 @@ async def ask(settings: Settings, question: str, context: dict[str, Any]) -> Gro
     text = await _chat(settings, prompt)
     if not text:
         return GroqTextResponse(text=fallback, source="fallback", ai_available=False)
-    return GroqTextResponse(text=text.strip(), source="groq", ai_available=True)
+    return GroqTextResponse(text=_clean_ai_text(text), source="groq", ai_available=True)
 
 
 async def _chat(settings: Settings, prompt: str) -> str | None:
