@@ -95,6 +95,8 @@ class ImportSessionResponse(BaseModel):
     unresolved_count: int
     resolved_count: int = 0
     risks_outside_preview: bool = False
+    infer_timestamps: bool = False
+    show_infer_timestamps: bool = False
 
     model_config = {"populate_by_name": True, "ser_json_by_alias": True}
 

@@ -11,6 +11,70 @@ from app.services.parse import parse_path
 FIXTURES = Path(__file__).resolve().parents[1] / "fixtures"
 
 
+def test_clean_import_zero_risks():
+    parsed = parse_path(FIXTURES / "clean_import_control.csv")
+    cols = infer_columns(parsed.headers, parsed.rows)
+    amount = next(c for c in cols if c.name == "amount")
+    assert amount.type == ColumnType.DECIMAL
+    assert amount.decimal is not None
+    assert amount.decimal.scale == 2
+    risks = scan_table(parsed.headers, parsed.rows, cols)
+    assert risks == []
+
+
+def test_rounding_sample_forced_scale_zero():
+    parsed = parse_path(FIXTURES / "numeric_rounding_control.csv")
+    cols = infer_columns(parsed.headers, parsed.rows)
+    # Default inference should use scale from values (safe).
+    amount = next(c for c in cols if c.name == "amount")
+    assert amount.type == ColumnType.DECIMAL
+    assert amount.decimal is not None
+    assert amount.decimal.scale >= 2
+    forced = [
+        ColumnSchema(name=c.name, type=ColumnType.DECIMAL, decimal=DecimalParams(precision=10, scale=0))
+        if c.name == "amount"
+        else c
+        for c in cols
+    ]
+    risks = scan_table(parsed.headers, parsed.rows, forced)
+    assert any(r.category.value == "decimal_scale_rounding" for r in risks)
+
+
+def test_json_timestamp_inference():
+    parsed = parse_path(FIXTURES / "numeric_string_control.json")
+    cols = infer_columns(
+        parsed.headers,
+        parsed.rows,
+        infer_timestamps=True,
+        source_format="json",
+    )
+    customer = next(c for c in cols if c.name == "customer_id")
+    assert customer.type == ColumnType.TIMESTAMP
+    assert convert_value("000123", customer) == "0123-01-01T00:00:00.000Z"
+    risks = scan_table(parsed.headers, parsed.rows, cols)
+    ts = next(r for r in risks if r.category.value == "invalid_timestamp")
+    assert ts.recommended_action == "Turn off timestamp inference."
+    assert any(
+        ex.original == "000123" and ex.converted == "0123-01-01T00:00:00.000Z"
+        for ex in ts.examples
+    )
+
+
+def test_json_timestamp_inference_off_keeps_string():
+    parsed = parse_path(FIXTURES / "numeric_string_control.json")
+    cols = infer_columns(
+        parsed.headers,
+        parsed.rows,
+        infer_timestamps=False,
+        source_format="json",
+    )
+    customer = next(c for c in cols if c.name == "customer_id")
+    assert customer.type == ColumnType.STRING
+    risks = scan_table(parsed.headers, parsed.rows, cols)
+    assert not any(r.category.value == "invalid_timestamp" for r in risks)
+    assert not any(r.column == "customer_id" for r in risks)
+
+
 def test_leading_zero_customer_id():
     parsed = parse_path(FIXTURES / "conversion_edge_cases.csv")
     cols = infer_columns(parsed.headers, parsed.rows)

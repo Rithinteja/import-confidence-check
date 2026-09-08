@@ -821,6 +821,40 @@ section h2,
   background: #fff;
 }
 
+.advanced-attrs {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--dbx-border);
+  display: grid;
+  gap: 10px;
+}
+
+.advanced-check {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  align-items: start;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--dbx-text);
+}
+
+.advanced-check input {
+  margin-top: 3px;
+}
+
+.advanced-check span {
+  display: grid;
+  gap: 4px;
+}
+
+.advanced-check small {
+  color: var(--dbx-muted);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
 .table-scroll {
   overflow: auto;
   max-height: 520px;

@@ -43,6 +43,7 @@ function PreviewContent() {
   const [aiSummary, setAiSummary] = useState("");
   const [aiSummarySource, setAiSummarySource] = useState<"groq" | "fallback" | "">("");
   const [aiByRisk, setAiByRisk] = useState<Record<string, { text: string; source: string }>>({});
+  const [advancedOpen, setAdvancedOpen] = useState(true);
 
   useEffect(() => {
     if (!sessionId) {
@@ -138,12 +139,20 @@ function PreviewContent() {
   }
 
   async function saveMeta(
-    field: "catalog" | "schema" | "table_name" | "action",
-    value: string,
+    field: "catalog" | "schema" | "table_name" | "action" | "infer_timestamps",
+    value: string | boolean,
   ) {
-    if (!data || !value.trim()) return;
+    if (!data) return;
+    if (typeof value === "string" && !value.trim()) return;
     try {
-      setData(await api.updateMeta(sessionId, { [field]: value.trim() }));
+      setData(
+        await api.updateMeta(
+          sessionId,
+          typeof value === "boolean"
+            ? { infer_timestamps: value }
+            : { [field]: value.trim() },
+        ),
+      );
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not save table settings");
     }
@@ -280,6 +289,33 @@ function PreviewContent() {
                 </select>
               </label>
             </div>
+            {data.show_infer_timestamps ? (
+              <div className="advanced-attrs">
+                <button
+                  type="button"
+                  className="link-button"
+                  onClick={() => setAdvancedOpen((open) => !open)}
+                >
+                  {advancedOpen ? "Hide advanced attributes" : "Advanced attributes"}
+                </button>
+                {advancedOpen ? (
+                  <label className="advanced-check">
+                    <input
+                      type="checkbox"
+                      checked={Boolean(data.infer_timestamps)}
+                      onChange={(e) => void saveMeta("infer_timestamps", e.target.checked)}
+                    />
+                    <span>
+                      Infer timestamp
+                      <small>
+                        When on, JSON digit strings like 000123 become timestamps
+                        (0123-01-01T00:00:00.000Z).
+                      </small>
+                    </span>
+                  </label>
+                ) : null}
+              </div>
+            ) : null}
           </section>
 
           <section className="data-preview" aria-labelledby="preview-heading">
@@ -388,7 +424,10 @@ function PreviewContent() {
             {activeRisks.length === 0 ? (
               <div className="all-clear">
                 <strong>Important values preserved</strong>
-                <p>No conversion risks remain. Ready to create the table.</p>
+                <p>
+                  No conversion risks found across {data.total_rows.toLocaleString()} checked
+                  rows. Ready to create the table.
+                </p>
               </div>
             ) : null}
 

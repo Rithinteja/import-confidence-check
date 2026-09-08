@@ -6,8 +6,11 @@ from fastapi.responses import FileResponse
 from app.config import FIXTURES_DIR, get_settings
 from app.models import (
     ApplyFixRequest,
+    ColumnSchema,
+    ColumnType,
     CreateTableRequest,
     CreatedTableResponse,
+    DecimalParams,
     GroqAskRequest,
     GroqExplainRequest,
     GroqSummaryRequest,
@@ -52,7 +55,7 @@ SAMPLES: list[SampleFileInfo] = [
         id="json",
         label="JSON type test",
         filename="numeric_string_control.json",
-        description="Quoted identifiers vs numeric JSON values",
+        description="Quoted IDs like 000123 inferred as timestamps when Infer timestamp is on",
     ),
     SampleFileInfo(
         id="json-mixed",
@@ -134,6 +137,22 @@ def load_sample(sample_id: str) -> ImportSessionResponse:
     except Exception as exc:  # noqa: BLE001
         raise HTTPException(400, str(exc)) from exc
     session = store.create(parsed)
+    # Dedicated rounding sample: force decimal(10,0) so scale-0 rounding is visible.
+    if sample_id == "rounding":
+        session.columns = [
+            (
+                ColumnSchema(
+                    name=col.name,
+                    type=ColumnType.DECIMAL,
+                    decimal=DecimalParams(precision=10, scale=0),
+                )
+                if col.name == "amount"
+                else col
+            )
+            for col in session.columns
+        ]
+        session.rescan()
+        store.persist(session)
     return store.response(session)
 
 
@@ -170,8 +189,12 @@ def apply_fix(session_id: str, body: ApplyFixRequest) -> ImportSessionResponse:
     risk = next((r for r in session.risks if r.risk_id == body.risk_id), None)
     if not risk:
         raise HTTPException(404, "Risk not found or already resolved")
-    session.columns = apply_recommended_fix(session.columns, risk)
     before = {r.risk_id for r in session.risks}
+    if "timestamp inference" in risk.recommended_action.lower():
+        session.infer_timestamps = False
+        session.reinfer_columns()
+    else:
+        session.columns = apply_recommended_fix(session.columns, risk)
     session.rescan()
     after = {r.risk_id for r in session.risks}
     if body.risk_id in before and body.risk_id not in after:
@@ -194,6 +217,10 @@ def update_meta(session_id: str, payload: dict) -> ImportSessionResponse:
         session.schema_name = str(payload["schema"])
     if "action" in payload and payload["action"]:
         session.action = str(payload["action"])
+    if "infer_timestamps" in payload and session.parsed.format == "json":
+        session.infer_timestamps = bool(payload["infer_timestamps"])
+        session.reinfer_columns()
+        session.rescan()
     store.persist(session)
     return store.response(session)
 

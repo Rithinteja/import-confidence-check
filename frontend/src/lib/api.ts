@@ -60,6 +60,8 @@ export interface ImportSession {
   unresolved_count: number;
   resolved_count: number;
   risks_outside_preview: number | boolean;
+  infer_timestamps?: boolean;
+  show_infer_timestamps?: boolean;
   [key: string]: unknown;
 }
 
@@ -100,7 +102,9 @@ export const api = {
     }),
   updateMeta: (
     id: string,
-    body: Partial<Pick<ImportSession, "table_name" | "catalog" | "action">> & {
+    body: Partial<
+      Pick<ImportSession, "table_name" | "catalog" | "action" | "infer_timestamps">
+    > & {
       schema?: string;
     },
   ) =>

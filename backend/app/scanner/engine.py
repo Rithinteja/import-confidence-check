@@ -418,7 +418,7 @@ def _timestamp_risks(
             continue
         stripped = raw.strip()
         converted = convert_value(raw, col)
-        if _INT_RE.match(stripped) and len(stripped) >= 5:
+        if _INT_RE.match(stripped) and len(stripped) >= 4:
             id_hits.append(i)
             converted_map[i] = converted
         elif converted is None:
@@ -428,7 +428,11 @@ def _timestamp_risks(
     risks: list[ImportRisk] = []
     if id_hits:
         examples, outside = _examples_from(
-            id_hits, values, converted_map, preview_limit, "Identifier-like value treated as timestamp"
+            id_hits,
+            values,
+            converted_map,
+            preview_limit,
+            "Identifier inferred as timestamp",
         )
         risks.append(
             ImportRisk(
@@ -440,10 +444,11 @@ def _timestamp_risks(
                 scanned_rows=scanned,
                 examples=examples,
                 explanation=(
-                    f"Identifier-like values in {name} are being interpreted as timestamps. Keep as String to preserve IDs."
+                    f"Identifier-like values in {name} are being inferred as timestamps "
+                    f"(for example 000123 → 0123-01-01T00:00:00.000Z)."
                 ),
                 recommended_type=ColumnType.STRING,
-                recommended_action="Keep as String",
+                recommended_action="Turn off timestamp inference.",
                 outside_preview_count=outside,
                 title=f"{_pretty(name)} misread as timestamp",
             )

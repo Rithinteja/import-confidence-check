@@ -27,7 +27,14 @@ class ImportSession:
         settings = get_settings()
         self.session_id = session_id or str(uuid4())
         self.parsed = parsed
-        self.columns: list[ColumnSchema] = infer_columns(parsed.headers, parsed.rows)
+        # Databricks JSON Advanced attribute: Infer timestamp (on by default for JSON).
+        self.infer_timestamps = parsed.format == "json"
+        self.columns: list[ColumnSchema] = infer_columns(
+            parsed.headers,
+            parsed.rows,
+            infer_timestamps=self.infer_timestamps,
+            source_format=parsed.format,
+        )
         self.catalog = "dbacademy"
         self.schema_name = "default"
         self.table_name = suggest_table_name(parsed.filename)
@@ -37,6 +44,14 @@ class ImportSession:
         self.preview_limit = settings.preview_row_limit
         self._risk_snapshot: list[ImportRisk] = []
         self.rescan()
+
+    def reinfer_columns(self) -> None:
+        self.columns = infer_columns(
+            self.parsed.headers,
+            self.parsed.rows,
+            infer_timestamps=self.infer_timestamps,
+            source_format=self.parsed.format,
+        )
 
     def rescan(self) -> list[ImportRisk]:
         risks = scan_table(
@@ -63,6 +78,7 @@ class ImportSession:
             "schema_name": self.schema_name,
             "table_name": self.table_name,
             "action": self.action,
+            "infer_timestamps": self.infer_timestamps,
             "resolved_risk_ids": sorted(self.resolved_risk_ids),
             "preview_limit": self.preview_limit,
             "created": self.created.model_dump(mode="json", by_alias=True) if self.created else None,
@@ -74,6 +90,9 @@ class ImportSession:
         session = cls.__new__(cls)
         session.session_id = payload["session_id"]
         session.parsed = parsed
+        session.infer_timestamps = bool(
+            payload.get("infer_timestamps", parsed.format == "json")
+        )
         session.columns = [ColumnSchema.model_validate(c) for c in payload.get("columns", [])]
         session.catalog = payload.get("catalog", "dbacademy")
         session.schema_name = payload.get("schema_name", "default")
@@ -123,6 +142,8 @@ class ImportSession:
             unresolved_count=unresolved,
             resolved_count=resolved,
             risks_outside_preview=outside,
+            infer_timestamps=self.infer_timestamps,
+            show_infer_timestamps=self.parsed.format == "json",
         )
 
 

@@ -119,9 +119,14 @@ def _as_date(text: str) -> Optional[str]:
 
 def _as_timestamp(text: str) -> Optional[str]:
     v = text.strip()
-    if _INT_RE.match(v) and len(v) >= 5:
-        # Identifier-like numbers should not become timestamps; return a fake conversion
-        # only if inference chose timestamp; mark as converted epoch-ish string
+    # Databricks-style: digit identifiers like "000123" → year 0123-01-01T00:00:00.000Z
+    if _INT_RE.match(v) and len(v) >= 4:
+        try:
+            year = int(v)
+        except ValueError:
+            return None
+        if 0 <= year <= 9999:
+            return f"{year:04d}-01-01T00:00:00.000Z"
         return None
     if _TS_RE.match(v):
         return v.replace("T", " ")
