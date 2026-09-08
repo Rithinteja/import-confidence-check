@@ -154,6 +154,35 @@ def test_schema_fix_removes_warning():
     assert not any(r.risk_id == "customer_id-leading-zero" for r in risks2)
 
 
+def test_preview_reflects_proposed_types():
+    from app.session_store import ImportSession
+
+    parsed = parse_path(FIXTURES / "conversion_edge_cases.csv")
+    session = ImportSession(parsed)
+    amount_idx = parsed.headers.index("amount")
+
+    session.columns = [
+        ColumnSchema(name=c.name, type=ColumnType.DOUBLE) if c.name == "amount" else c
+        for c in session.columns
+    ]
+    session.rescan()
+    preview = session.to_response().preview_rows
+    assert sum(1 for row in preview if row.get("amount") is None) >= 1
+
+    session.columns = [
+        ColumnSchema(name=c.name, type=ColumnType.STRING) if c.name == "amount" else c
+        for c in session.columns
+    ]
+    session.rescan()
+    preview2 = session.to_response().preview_rows
+    for i, row in enumerate(preview2):
+        raw = parsed.rows[i][amount_idx]
+        if raw.strip() == "":
+            assert row.get("amount") == ""
+        else:
+            assert row.get("amount") == raw
+
+
 def test_json_parse_preserves_quoted_id():
     parsed = parse_path(FIXTURES / "numeric_string_control.json")
     assert parsed.rows[0][parsed.headers.index("customer_id")] == "000123"

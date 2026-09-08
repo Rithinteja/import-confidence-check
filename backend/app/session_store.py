@@ -117,12 +117,7 @@ class ImportSession:
             status = f"{unresolved} import risks found"
         preview = []
         for row in self.parsed.rows[: self.preview_limit]:
-            preview.append(
-                {
-                    self.parsed.headers[i]: (row[i] if i < len(row) else "")
-                    for i in range(len(self.parsed.headers))
-                }
-            )
+            preview.append(materialize_row(row, self.columns))
         outside = any(r.outside_preview_count > 0 for r in risks)
         return ImportSessionResponse(
             session_id=self.session_id,

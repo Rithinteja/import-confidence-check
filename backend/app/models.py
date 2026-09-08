@@ -87,7 +87,7 @@ class ImportSessionResponse(BaseModel):
     table_name: str
     action: str = "Create new table"
     columns: list[ColumnSchema]
-    preview_rows: list[dict[str, str]]
+    preview_rows: list[dict[str, Optional[str]]]
     preview_limit: int
     total_rows: int
     risks: list[ImportRisk]

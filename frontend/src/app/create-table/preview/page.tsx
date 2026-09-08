@@ -129,8 +129,7 @@ function PreviewContent() {
   async function applyFix(risk: ImportRisk) {
     setWorking(risk.risk_id);
     try {
-      await api.applyFix(sessionId, risk.risk_id);
-      setData(await api.session(sessionId));
+      setData(await api.applyFix(sessionId, risk.risk_id));
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not apply fix");
     } finally {
