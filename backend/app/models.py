@@ -120,7 +120,7 @@ class CreatedTableResponse(BaseModel):
     columns: list[ColumnSchema]
     sample_rows: list[dict[str, Any]]
     total_rows: int
-    owner: str = "rithi@example.com"
+    owner: str = "db"
     created_at: str
     table_type: str = "Managed Delta"
     size_label: str

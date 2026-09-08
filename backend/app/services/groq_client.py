@@ -26,8 +26,9 @@ async def explain_risk(settings: Settings, risk: ImportRisk, column_role: str = 
         "outsidePreview": risk.outside_preview_count > 0,
     }
     prompt = (
-        "Rewrite this structured Databricks import risk as 2 short sentences for a PM. "
-        "Do not invent new risks or change counts. Mention what changed, why it matters, and the fix.\n"
+        "Rewrite this Databricks import risk for a busy analyst. "
+        "Use at most 2 short plain sentences. No buzzwords. "
+        "Say what changes, why it matters, and the fix. Do not invent risks or change counts.\n"
         f"DATA: {json.dumps(payload)}"
     )
     text = await _chat(settings, prompt)
@@ -63,8 +64,9 @@ async def import_summary(
         "resolvedCount": len(resolved),
     }
     prompt = (
-        "Summarize this import confidence scan in at most 3 sentences. "
-        "Do not invent risks. Prefer business impact language.\n"
+        "Summarize this import scan in plain English. "
+        "Return 3 to 6 short lines. Prefer a short intro line, then bullet lines starting with '- '. "
+        "Name columns and counts from the data only. No jargon stacks. Do not invent risks.\n"
         f"DATA: {json.dumps(payload)}"
     )
     text = await _chat(settings, prompt)
@@ -102,8 +104,8 @@ async def _chat(settings: Settings, prompt: str) -> str | None:
             {
                 "role": "system",
                 "content": (
-                    "You explain Databricks file-import conversion risks. "
-                    "Never change counts, types, or invent findings."
+                    "You explain file-import conversion risks in plain English. "
+                    "Be short and concrete. Never change counts, types, or invent findings."
                 ),
             },
             {"role": "user", "content": prompt},

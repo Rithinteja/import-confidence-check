@@ -642,7 +642,7 @@ section h2,
 }
 
 .readme-page {
-  max-width: 720px;
+  max-width: 640px;
 }
 
 .readme-page .page-heading,
@@ -656,20 +656,42 @@ section h2,
   padding-right: 0;
 }
 
+.readme-page .page-heading {
+  margin-bottom: 20px;
+}
+
+.readme-page .page-heading h1 {
+  margin: 0 0 6px;
+  font-size: 28px;
+  line-height: 1.2;
+}
+
+.readme-page .page-heading p {
+  margin: 0;
+  max-width: 42rem;
+}
+
 .readme-banner {
   display: grid;
-  gap: 6px;
-  padding: 14px 16px;
-  margin-bottom: 28px;
+  gap: 4px;
+  padding: 12px 14px;
+  margin-bottom: 32px;
   border: 1px solid #f0d3a3;
   background: #fff8eb;
   border-radius: 2px;
   color: var(--dbx-secondary);
   box-sizing: border-box;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.readme-banner strong {
+  color: var(--dbx-text);
+  font-weight: 650;
 }
 
 .demo-cta-card {
-  padding: 0;
+  padding: 0 0 4px;
   border: none;
   background: transparent;
 }
@@ -683,7 +705,7 @@ section h2,
   flex-wrap: wrap;
   gap: 10px;
   align-items: center;
-  margin: 12px 0 0;
+  margin: 14px 0 0;
 }
 
 .demo-cta-actions .primary-button,
@@ -698,29 +720,52 @@ section h2,
 }
 
 .readme-section {
-  margin-bottom: 28px;
+  margin-bottom: 32px;
+  padding-top: 4px;
+  border-top: 1px solid var(--dbx-border);
+}
+
+.readme-section:first-of-type {
+  border-top: none;
+  padding-top: 0;
 }
 
 .readme-section h2 {
   margin: 0 0 10px;
-  font-size: 18px;
+  font-size: 16px;
+  font-weight: 650;
+  letter-spacing: 0;
 }
 
 .readme-section > p {
   margin: 0 0 12px;
+  color: var(--dbx-secondary);
+  line-height: 1.5;
+}
+
+.readme-section > p.muted {
+  margin-top: 12px;
+  font-size: 13px;
 }
 
 .readme-steps,
 .readme-list {
   margin: 0;
-  padding-left: 1.25rem;
+  padding-left: 1.2rem;
   display: grid;
   gap: 10px;
+  color: var(--dbx-secondary);
+  line-height: 1.5;
 }
 
 .readme-steps li,
 .readme-list li {
-  padding-left: 0.25rem;
+  padding-left: 0.2rem;
+}
+
+.readme-list strong {
+  color: var(--dbx-text);
+  font-weight: 650;
 }
 
 .readme-section code {
@@ -949,12 +994,14 @@ section h2,
   margin-bottom: 12px;
 }
 
+.ai-summary-text,
 .ai-summary p,
 .ask-answer,
 .risk-explanation {
   margin: 0;
   color: var(--dbx-secondary);
   line-height: 1.45;
+  white-space: pre-line;
 }
 
 .scan-summary {

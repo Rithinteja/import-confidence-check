@@ -54,7 +54,6 @@ function CatalogContent() {
         <span>{schema}</span>
       </div>
       <div className="catalog-title-row">
-        <div className="table-mark">T</div>
         <div>
           <div className="eyebrow">TABLE</div>
           <h1>{table}</h1>
@@ -137,7 +136,7 @@ function CatalogContent() {
                   <dt>Format</dt>
                   <dd>DELTA</dd>
                   <dt>Owner</dt>
-                  <dd>rithi</dd>
+                  <dd>{text(created?.owner ?? "db")}</dd>
                   <dt>Rows</dt>
                   <dd>{text(created?.total_rows ?? created?.row_count ?? rows.length)}</dd>
                 </dl>
@@ -196,7 +195,7 @@ function CatalogContent() {
                 <dt>Created at</dt>
                 <dd>{text(created?.created_at ?? "Just now")}</dd>
                 <dt>Created by</dt>
-                <dd>{text(created?.created_by ?? "rithi")}</dd>
+                <dd>{text(created?.created_by ?? created?.owner ?? "db")}</dd>
                 <dt>Storage location</dt>
                 <dd>{text(created?.location ?? "Managed by Databricks")}</dd>
               </dl>

@@ -134,7 +134,7 @@ function CreateTableContent() {
         <p className="drop-meta">Maximum upload size: 10 MB in this prototype.</p>
         <p className="drop-meta">
           Supported file formats: CSV, TSV, JSON, or Excel. Any valid test file works. Parsing and
-          Import Confidence Check run on the uploaded values. Groq can add short AI explanations.
+          Import Confidence Check run on the uploaded values. Optional short risk notes can appear when AI is enabled.
         </p>
         <input
           ref={inputRef}
@@ -188,7 +188,7 @@ function CreateTableContent() {
                       type="button"
                       onClick={() => void chooseSample(id)}
                     >
-                      {featured ? "Try this file" : "Use sample"}
+                      Try this file
                     </button>
                   </span>
                 </div>

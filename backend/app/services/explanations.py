@@ -5,32 +5,36 @@ from app.models import ImportRisk, RiskCategory
 
 def fallback_explain(risk: ImportRisk, column_role: str = "") -> str:
     role = column_role or risk.column.replace("_", " ")
+    example = ""
+    if risk.examples:
+        original = risk.examples[0].original
+        converted = risk.examples[0].converted
+        if original is not None and converted is not None:
+            example = f" Example: {original} → {converted}."
+
     mapping = {
         RiskCategory.LEADING_ZERO_LOSS: (
-            f"{risk.affected_rows} values in {role} will lose leading zeros "
-            f"(example {risk.examples[0].original if risk.examples else ''} → "
-            f"{risk.examples[0].converted if risk.examples else ''}). "
-            "This can break joins and lookups. Keep the column as String."
+            f"{risk.affected_rows} values in {role} lose leading zeros.{example} "
+            "Keep as String so IDs and codes stay exact."
         ),
         RiskCategory.IDENTIFIER_COLLISION: (
-            f"Distinct {role} values will store as the same value after conversion, "
-            "which can merge different records. Keep the column as String."
+            f"Different {role} values would store as the same value after conversion. "
+            "Keep as String so records do not merge."
         ),
         RiskCategory.DECIMAL_PRECISION_LOSS: (
-            f"{role} may lose digits when stored as Double, which can change measurements or totals. "
-            "Prefer Decimal with enough scale."
+            f"{role} may lose digits as Double.{example} Prefer Decimal with enough scale."
         ),
         RiskCategory.DECIMAL_SCALE_ROUNDING: (
-            f"{role} values such as 19.99 may round (for example to 20) under the proposed decimal scale. "
-            "Use a scale that preserves cents."
+            f"{role} values can round under the proposed scale "
+            "(for example 19.99 → 20). Use a scale that keeps the cents."
         ),
         RiskCategory.INVALID_DATE: (
-            f"{risk.affected_rows} non-empty {role} values become null as Date, which can drop records "
-            "from time-based analysis. Keep as String or clean the source values."
+            f"{risk.affected_rows} non-empty {role} values become null as Date. "
+            "Keep as String or clean the source values."
         ),
         RiskCategory.INVALID_TIMESTAMP: (
-            f"{role} appears to include identifier-like values being read as timestamps. "
-            "Keep as String to preserve the original values."
+            f"{role} looks like an ID being read as a timestamp.{example} "
+            "Keep as String, or turn off timestamp inference."
         ),
         RiskCategory.NULL_AFTER_CONVERSION: (
             f"{risk.affected_rows} non-empty {role} values become null under the proposed type. "
@@ -44,6 +48,19 @@ def fallback_explain(risk: ImportRisk, column_role: str = "") -> str:
     return mapping.get(risk.category, risk.explanation)
 
 
+def _risk_line(risk: ImportRisk) -> str:
+    title = risk.title or risk.column
+    bits = [f"- {title} ({risk.severity.value}): {risk.affected_rows} row(s)"]
+    if risk.examples:
+        original = risk.examples[0].original
+        converted = risk.examples[0].converted
+        if original is not None and converted is not None:
+            bits.append(f"  e.g. {original} → {converted}")
+    if risk.outside_preview_count > 0:
+        bits.append("  some rows are past the visible preview")
+    return "\n".join(bits)
+
+
 def fallback_summary(
     unresolved: list[ImportRisk],
     resolved: list[ImportRisk],
@@ -51,25 +68,32 @@ def fallback_summary(
     preview_limit: int,
 ) -> str:
     if not unresolved and not resolved:
-        return f"Scanned {total_rows} rows. No conversion risks found. Ready to create the table."
+        return f"Scanned {total_rows} rows.\nNo conversion risks found.\nReady to create the table."
     if not unresolved and resolved:
         return (
-            f"Scanned {total_rows} rows. {len(resolved)} risk(s) fixed. "
+            f"Scanned {total_rows} rows.\n"
+            f"{len(resolved)} risk(s) fixed.\n"
             "Important values are preserved under the current schema."
         )
-    outside = sum(1 for r in unresolved if r.outside_preview_count > 0)
-    parts = [
-        f"{len(unresolved)} conversion risk(s) found across {total_rows} rows."
+
+    lines = [
+        f"Scanned {total_rows} rows. Found {len(unresolved)} open risk(s):",
+        "",
     ]
-    top = unresolved[0]
-    parts.append(f"Highest priority: {top.title or top.column} ({top.severity.value}).")
+    for risk in unresolved[:5]:
+        lines.append(_risk_line(risk))
+    if len(unresolved) > 5:
+        lines.append(f"- …and {len(unresolved) - 5} more")
+    outside = sum(1 for r in unresolved if r.outside_preview_count > 0)
     if outside:
-        parts.append(
-            f"{outside} risk(s) include issues found outside the visible {preview_limit}-row preview."
+        lines.append("")
+        lines.append(
+            f"{outside} of these show up past the first {preview_limit} preview rows."
         )
     if resolved:
-        parts.append(f"{len(resolved)} risk(s) already fixed.")
-    return " ".join(parts)
+        lines.append("")
+        lines.append(f"{len(resolved)} risk(s) already fixed.")
+    return "\n".join(lines)
 
 
 def fallback_ask(question: str, unresolved: list[str], resolved: list[str]) -> str:
