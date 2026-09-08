@@ -15,28 +15,6 @@ export default function ReadmePage() {
         samples.
       </div>
 
-      <section className="readme-section" aria-labelledby="recommended-heading">
-        <h2 id="recommended-heading">Recommended first</h2>
-        <p className="readme-lead">
-          Start with the leading-zero sample. It shows ID and postal-code loss, bad dates, and
-          rounding risks in one file.
-        </p>
-        <div className="readme-cta">
-          <Link className="feature-card feature-card-primary" href="/create-table/?sample=leading-zero">
-            <span className="feature-copy">
-              <strong>Try this file</strong>
-              <small>Load leading-zero and conversion risks.</small>
-            </span>
-            <span className="feature-chevron" aria-hidden="true">
-              &gt;
-            </span>
-          </Link>
-          <Link className="readme-secondary-link" href="/create-table/">
-            Browse all samples
-          </Link>
-        </div>
-      </section>
-
       <section className="readme-section" aria-labelledby="howto-heading">
         <h2 id="howto-heading">How to use</h2>
         <ol className="readme-steps">
