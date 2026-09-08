@@ -90,10 +90,6 @@ function CreateTableContent() {
           </div>
           <h1>Create table from file</h1>
         </div>
-        <div className="warehouse-chip" title="Prototype compute selector">
-          <span className="status-dot" />
-          Serverless Starter Warehouse
-        </div>
       </div>
 
       <div className="source-tabs square-tabs">
@@ -119,7 +115,7 @@ function CreateTableContent() {
             "Preparing your preview…"
           ) : (
             <>
-              Drop one or more files here, or{" "}
+              Drop a file here, or{" "}
               <button
                 type="button"
                 className="link-button inline-link"
@@ -131,11 +127,7 @@ function CreateTableContent() {
             </>
           )}
         </p>
-        <p className="drop-meta">Maximum upload size: 10 MB in this prototype.</p>
-        <p className="drop-meta">
-          Supported file formats: CSV, TSV, JSON, or Excel. Any valid test file works. Parsing and
-          Import Confidence Check run on the uploaded values. Optional short risk notes can appear when AI is enabled.
-        </p>
+        <p className="drop-meta">CSV, TSV, JSON, or Excel · max 10 MB</p>
         <input
           ref={inputRef}
           hidden
@@ -148,15 +140,14 @@ function CreateTableContent() {
       {error ? <div className="error-banner">{error}</div> : null}
 
       <p className="volume-note">
-        For larger files or non-tabular datasets, upload to a Volume in Unity Catalog. That path is
-        not in this prototype.
+        Larger files belong in a Unity Catalog Volume. That path is not in this prototype.
       </p>
 
       <section className="samples">
         <div className="section-title-row">
           <div>
             <h2>Try a sample file</h2>
-            <p>Same engine as browse or drag-and-drop. Results are scanned live, not hardcoded.</p>
+            <p>Same live scan as an upload. Results are not hardcoded.</p>
           </div>
         </div>
         <div className="sample-list">

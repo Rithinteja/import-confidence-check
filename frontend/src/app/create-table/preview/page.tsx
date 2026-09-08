@@ -231,7 +231,6 @@ function PreviewContent() {
           <span>Preview</span>
         </nav>
         <div className="file-heading">
-          <span className="file-icon">{(data.format || "csv").toUpperCase()}</span>
           <div>
             <h1>{data.filename}</h1>
             <p>
@@ -390,44 +389,33 @@ function PreviewContent() {
             </span>
           </div>
 
+          <p className="scan-meta">
+            {data.unresolved_count} unresolved · {data.resolved_count} fixed
+            {data.risks_outside_preview ? " · some beyond preview" : ""}
+          </p>
+
           {aiSummary ? (
             <div className="ai-summary">
-              <div className="ai-label">
+              <p className="ai-summary-text">{aiSummary}</p>
+              <p className="ai-attribution">
                 {aiSummarySource === "fallback"
                   ? "Built-in summary"
                   : "AI / LLM generated report"}
-              </div>
-              <p className="ai-summary-text">{aiSummary}</p>
+              </p>
             </div>
           ) : (
             <p className="confidence-copy">
-              Scanned all {data.total_rows.toLocaleString()} rows for conversions that
-              could change meaning.
+              Scanned all {data.total_rows.toLocaleString()} rows for conversions that could change
+              meaning.
             </p>
           )}
-
-          <div className="scan-summary" aria-label="Scan summary">
-            <span>
-              <strong>{data.unresolved_count}</strong>
-              unresolved
-            </span>
-            <span>
-              <strong>{data.resolved_count}</strong>
-              fixed
-            </span>
-            <span>
-              <strong>{data.risks_outside_preview ? "Yes" : "No"}</strong>
-              beyond preview
-            </span>
-          </div>
 
           <div className="risk-list">
             {activeRisks.length === 0 ? (
               <div className="all-clear">
-                <strong>Important values preserved</strong>
+                <strong>No conversion risks found</strong>
                 <p>
-                  No conversion risks found across {data.total_rows.toLocaleString()} checked
-                  rows. Ready to create the table.
+                  All {data.total_rows.toLocaleString()} rows look safe under the proposed types.
                 </p>
               </div>
             ) : null}
@@ -438,9 +426,11 @@ function PreviewContent() {
                 <article className="risk-card" key={risk.risk_id}>
                   <div className="risk-card-head">
                     <span
-                      className={`severity-dot ${risk.severity}`}
+                      className={`severity-mark ${risk.severity}`}
                       aria-label={`${risk.severity} severity`}
-                    />
+                    >
+                      {risk.severity}
+                    </span>
                     <div>
                       <h3>{risk.title}</h3>
                       <p>
@@ -469,21 +459,15 @@ function PreviewContent() {
                   <p className="risk-explanation">
                     {ai?.text || risk.explanation}
                   </p>
-                  <div className="ai-label">
-                    {ai?.source === "groq"
-                      ? "AI / LLM generated report"
-                      : ai?.source === "fallback"
-                        ? "Built-in explanation"
-                        : "Loading explanation…"}
-                  </div>
+                  {ai?.source === "groq" ? (
+                    <p className="ai-attribution">AI / LLM generated report</p>
+                  ) : null}
 
                   <div className="risk-stats">
                     <strong>{risk.affected_rows.toLocaleString()}</strong> of{" "}
                     {risk.scanned_rows.toLocaleString()} rows affected
                     {risk.outside_preview_count > 0 ? (
-                      <span className="outside-note">
-                        Found outside the visible preview
-                      </span>
+                      <span className="outside-note">Outside the visible preview</span>
                     ) : null}
                   </div>
 
@@ -616,11 +600,6 @@ function PreviewContent() {
             aria-modal="true"
             aria-labelledby="modal-title"
           >
-            <div
-              className={`modal-symbol ${data.unresolved_count ? "warning" : "good"}`}
-            >
-              {data.unresolved_count ? "!" : "OK"}
-            </div>
             <h2 id="modal-title">
               {data.unresolved_count
                 ? "Create table with unresolved risks?"

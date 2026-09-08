@@ -101,7 +101,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
             Verify identity
           </button>
           <button className="workspace-switcher" type="button">
-            workspace
+            Workspace
           </button>
           <button className="avatar" type="button" aria-label="Account">
             DB
@@ -126,9 +126,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
             ))}
           </div>
         </nav>
-        <p className="prototype-label">
-          Prototype · Postgres storage · file scanner · Groq explanations
-        </p>
+        <p className="prototype-label">Prototype · file scanner · Postgres · Groq</p>
       </aside>
 
       <main className="main-area">{children}</main>

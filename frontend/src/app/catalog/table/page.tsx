@@ -55,7 +55,6 @@ function CatalogContent() {
       </div>
       <div className="catalog-title-row">
         <div>
-          <div className="eyebrow">TABLE</div>
           <h1>{table}</h1>
           <p>{path}</p>
         </div>
@@ -116,7 +115,7 @@ function CatalogContent() {
                           <strong>{text(column.name)}</strong>
                         </td>
                         <td>
-                          <span className="type-chip">{text(column.type)}</span>
+                          <code className="type-text">{text(column.type)}</code>
                         </td>
                         <td className="muted">-</td>
                       </tr>

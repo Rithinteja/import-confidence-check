@@ -34,10 +34,6 @@ export default function CatalogIndexPage() {
         <aside className="catalog-tree">
           <div className="catalog-tree-head">
             <h2>Catalog</h2>
-            <div className="warehouse-chip compact">
-              <span className="status-dot" />
-              Serverless Starter Warehouse
-            </div>
           </div>
           <div className="tree-group">
             <div className="tree-label">My organization</div>
