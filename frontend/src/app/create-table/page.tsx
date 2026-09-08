@@ -7,8 +7,6 @@ import { DragEvent, Suspense, useEffect, useRef, useState } from "react";
 
 type Sample = Record<string, unknown>;
 
-const FEATURED_SAMPLE_ID = "after-preview";
-
 function fileBadge(filename: string): string {
   const ext = filename.split(".").pop()?.toUpperCase() || "FILE";
   if (ext === "XLSX" || ext === "XLS") return "XLSX";
@@ -71,14 +69,6 @@ function CreateTableContent() {
     setDragging(false);
     void upload(e.dataTransfer.files[0]);
   }
-
-  const orderedSamples = [...samples].sort((a, b) => {
-    const aId = String(a.id ?? "");
-    const bId = String(b.id ?? "");
-    if (aId === FEATURED_SAMPLE_ID) return -1;
-    if (bId === FEATURED_SAMPLE_ID) return 1;
-    return 0;
-  });
 
   return (
     <div className="page-content upload-page dbx-upload">
@@ -160,14 +150,13 @@ function CreateTableContent() {
           </div>
         </div>
         <div className="sample-list">
-          {orderedSamples.length ? (
-            orderedSamples.map((sample, i) => {
+          {samples.length ? (
+            samples.map((sample, i) => {
               const id = String(sample.id ?? i);
               const filename = String(sample.filename ?? "");
               const name = String(sample.label ?? filename);
-              const featured = id === FEATURED_SAMPLE_ID;
               return (
-                <div className={`sample-row ${featured ? "sample-row-featured" : ""}`} key={id}>
+                <div className="sample-row" key={id}>
                   <span className="file-type">{fileBadge(filename)}</span>
                   <span className="sample-copy">
                     <strong className="sample-title">{name}</strong>
@@ -184,7 +173,7 @@ function CreateTableContent() {
                     </a>
                     <button
                       disabled={busy}
-                      className={`sample-action ${featured ? "sample-action-primary" : ""}`}
+                      className="sample-action"
                       type="button"
                       onClick={() => void chooseSample(id)}
                     >

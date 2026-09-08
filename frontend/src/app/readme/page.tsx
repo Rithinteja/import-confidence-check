@@ -18,14 +18,14 @@ export default function ReadmePage() {
       <section className="readme-section" aria-labelledby="recommended-heading">
         <h2 id="recommended-heading">Recommended first</h2>
         <p className="readme-lead">
-          Preview shows the first 50 rows. This 75-row sample looks clean there, then Confidence
-          Check finds risks from row 51 on.
+          Start with the leading-zero sample. It shows ID and postal-code loss, bad dates, and
+          rounding risks in one file.
         </p>
         <div className="readme-cta">
-          <Link className="feature-card feature-card-primary" href="/create-table/?sample=after-preview">
+          <Link className="feature-card feature-card-primary" href="/create-table/?sample=leading-zero">
             <span className="feature-copy">
               <strong>Try this file</strong>
-              <small>Load the 75-row sample and open the preview with risks.</small>
+              <small>Load leading-zero and conversion risks.</small>
             </span>
             <span className="feature-chevron" aria-hidden="true">
               &gt;

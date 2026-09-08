@@ -52,15 +52,14 @@ The product works without Groq.
 
 1. Open Add data.
 2. Click **Create or modify table**.
-3. Under Try a sample file, choose **Risks after preview row 50**.
-4. Note the grid shows 50 clean rows.
-5. Point to Import Confidence Check: risks found after row 50.
-6. Open a leading-zero warning; show original `000123` → proposed `123`.
-7. Explain joins / postal codes can break.
-8. Click **Keep as String**.
-9. Watch the risk clear / count drop.
-10. Create the table.
-11. Open Sample Data and confirm leading zeros preserved.
+3. Under Try a sample file, choose **Leading-zero and conversion risks**.
+4. Point to Import Confidence Check: leading zeros, dates, and rounding risks.
+5. Open a leading-zero warning; show original `000123` → proposed `123`.
+6. Explain joins / postal codes can break.
+7. Click **Keep as String**.
+8. Watch the risk clear / count drop.
+9. Create the table.
+10. Open Sample Data and confirm leading zeros preserved.
 
 ## Tests
 
