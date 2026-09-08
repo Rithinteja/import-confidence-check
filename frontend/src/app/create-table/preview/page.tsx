@@ -393,8 +393,9 @@ function PreviewContent() {
           {aiSummary ? (
             <div className="ai-summary">
               <div className="ai-label">
-                What this means
-                {aiSummarySource === "fallback" ? " · built-in summary" : ""}
+                {aiSummarySource === "fallback"
+                  ? "Built-in summary"
+                  : "AI / LLM generated report"}
               </div>
               <p className="ai-summary-text">{aiSummary}</p>
             </div>
@@ -470,7 +471,7 @@ function PreviewContent() {
                   </p>
                   <div className="ai-label">
                     {ai?.source === "groq"
-                      ? "Plain-language note"
+                      ? "AI / LLM generated report"
                       : ai?.source === "fallback"
                         ? "Built-in explanation"
                         : "Loading explanation…"}
