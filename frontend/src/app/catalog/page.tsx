@@ -48,6 +48,7 @@ export default function CatalogIndexPage() {
               <Link
                 key={t.session_id}
                 className="tree-item nested deep"
+                title={t.table_name}
                 href={`/catalog/table?catalog=${encodeURIComponent(t.catalog)}&schema=${encodeURIComponent(t.schema)}&table=${encodeURIComponent(t.table_name)}&session=${encodeURIComponent(t.session_id)}`}
               >
                 {t.table_name}
@@ -97,10 +98,12 @@ export default function CatalogIndexPage() {
                 {tables.map((t) => (
                   <tr key={t.session_id}>
                     <td>
-                      <Link
+                        <Link
+                        className="table-name-link"
+                        title={t.table_name}
                         href={`/catalog/table?catalog=${encodeURIComponent(t.catalog)}&schema=${encodeURIComponent(t.schema)}&table=${encodeURIComponent(t.table_name)}&session=${encodeURIComponent(t.session_id)}`}
                       >
-                        <strong>{t.table_name}</strong>
+                        {t.table_name}
                       </Link>
                     </td>
                     <td>{t.catalog}</td>

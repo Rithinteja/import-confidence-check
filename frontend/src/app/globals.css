@@ -670,6 +670,10 @@ section h2,
   line-height: 1.5;
 }
 
+.readme-lead-wide {
+  max-width: 68ch;
+}
+
 .readme-cta {
   display: grid;
   gap: 10px;
@@ -1476,6 +1480,8 @@ section h2,
   border-right: 1px solid var(--dbx-border);
   background: #fff;
   padding: 16px 12px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .catalog-tree-head h2 {
@@ -1485,6 +1491,7 @@ section h2,
 
 .tree-group {
   margin-top: 16px;
+  min-width: 0;
 }
 
 .tree-label {
@@ -1500,6 +1507,10 @@ section h2,
   padding: 6px 8px;
   border-radius: 2px;
   color: var(--dbx-secondary);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .tree-item.nested { padding-left: 20px; }
@@ -1521,8 +1532,22 @@ section h2,
   justify-items: start;
 }
 
-.catalog-list-table a {
+.catalog-list-table a,
+.catalog-list-table .table-name-link {
   color: var(--dbx-blue);
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+.catalog-title-row h1 {
+  max-width: min(100%, 42rem);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .meta-grid input,

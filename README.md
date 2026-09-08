@@ -50,16 +50,15 @@ The product works without Groq.
 
 ## Demo script (2 minutes)
 
-1. Open Add data.
-2. Click **Create or modify table**.
-3. Under Try a sample file, choose **Leading-zero and conversion risks**.
-4. Point to Import Confidence Check: leading zeros, dates, and rounding risks.
-5. Open a leading-zero warning; show original `000123` → proposed `123`.
-6. Explain joins / postal codes can break.
-7. Click **Keep as String**.
-8. Watch the risk clear / count drop.
-9. Create the table.
-10. Open Sample Data and confirm leading zeros preserved.
+1. Open the site Home page, then go to Data Ingestion → **Create or modify table**.
+2. Under Try a sample file, choose **Leading-zero and conversion risks**.
+3. Point to Import Confidence Check: leading zeros, dates, and rounding risks.
+4. Open a leading-zero warning; show original `000123` → proposed `123`.
+5. Explain joins / postal codes can break.
+6. Click **Keep as String**.
+7. Watch the risk clear / count drop.
+8. Create the table.
+9. Open Sample Data and confirm leading zeros preserved.
 
 ## Tests
 

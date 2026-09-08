@@ -75,7 +75,7 @@ function CreateTableContent() {
       <div className="upload-top-row">
         <div>
           <div className="breadcrumb">
-            <Link href="/">Add data</Link>
+            <Link href="/add-data/">Add data</Link>
             <span>/</span>
           </div>
           <h1>Create table from file</h1>

@@ -223,7 +223,7 @@ function PreviewContent() {
     <div className="preview-page">
       <div className="preview-header">
         <nav className="breadcrumb" aria-label="Breadcrumb">
-          <Link href="/">Add data</Link>
+          <Link href="/add-data/">Add data</Link>
           <span>/</span>
           <Link href="/create-table">Create table from file</Link>
           <span>/</span>

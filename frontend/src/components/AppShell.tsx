@@ -7,19 +7,20 @@ import { useEffect, useState, type ReactNode } from "react";
 type NavItem = { label: string; href: string };
 
 const navItems: NavItem[] = [
-  { label: "Home", href: "/readme" },
-  { label: "Catalog", href: "/catalog" },
-  { label: "Data Ingestion", href: "/" },
+  { label: "Home", href: "/" },
+  { label: "Catalog", href: "/catalog/" },
+  { label: "Data Ingestion", href: "/add-data/" },
 ];
 
 function isActive(pathname: string, item: NavItem): boolean {
-  if (item.label === "Home") return pathname.startsWith("/readme");
+  if (item.label === "Home") {
+    return pathname === "/" || pathname.startsWith("/readme");
+  }
   if (item.label === "Catalog") return pathname.startsWith("/catalog");
   if (item.label === "Data Ingestion") {
     return (
-      pathname === "/" ||
-      pathname.startsWith("/create-table") ||
-      pathname.startsWith("/add-data")
+      pathname.startsWith("/add-data") ||
+      pathname.startsWith("/create-table")
     );
   }
   return pathname === item.href;
@@ -77,7 +78,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
             <path d="M5.5 2.5v11" fill="none" stroke="currentColor" strokeWidth="1.25" />
           </svg>
         </button>
-        <Link className="brand" href="/readme">
+        <Link className="brand" href="/">
           <svg viewBox="0 0 34 34" aria-hidden="true">
             <path d="M17 2 31 10 17 18 3 10 17 2Z" fill="#ff3621" />
             <path
@@ -110,7 +111,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
       </header>
 
       <aside className="sidebar" aria-hidden={!sidebarOpen}>
-        <Link className="new-button" href="/">
+        <Link className="new-button" href="/add-data/">
           + New
         </Link>
         <nav aria-label="Primary">

@@ -9,7 +9,7 @@ const figtree = Figtree({
 });
 
 export const metadata: Metadata = {
-  title: "Add data | Databricks",
+  title: "Import Confidence Check",
   description: "Import Confidence Check prototype",
 };
 
