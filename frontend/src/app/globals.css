@@ -642,138 +642,136 @@ section h2,
 }
 
 .readme-page {
-  max-width: 640px;
-}
-
-.readme-page .page-heading,
-.readme-page .readme-banner,
-.readme-page .readme-section {
-  width: 100%;
-  max-width: none;
-  margin-left: 0;
-  margin-right: 0;
-  padding-left: 0;
-  padding-right: 0;
+  max-width: 760px;
 }
 
 .readme-page .page-heading {
-  margin-bottom: 20px;
-}
-
-.readme-page .page-heading h1 {
-  margin: 0 0 6px;
-  font-size: 28px;
-  line-height: 1.2;
-}
-
-.readme-page .page-heading p {
-  margin: 0;
-  max-width: 42rem;
+  margin-bottom: 16px;
 }
 
 .readme-banner {
-  display: grid;
-  gap: 4px;
-  padding: 12px 14px;
-  margin-bottom: 32px;
+  margin: 0 0 28px;
+  padding: 10px 12px;
   border: 1px solid #f0d3a3;
   background: #fff8eb;
   border-radius: 2px;
   color: var(--dbx-secondary);
-  box-sizing: border-box;
   font-size: 13px;
   line-height: 1.45;
 }
 
-.readme-banner strong {
-  color: var(--dbx-text);
-  font-weight: 650;
-}
-
-.demo-cta-card {
-  padding: 0 0 4px;
-  border: none;
-  background: transparent;
-}
-
-.demo-cta-card h2 {
-  margin-top: 0;
-}
-
-.demo-cta-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-items: center;
-  margin: 14px 0 0;
-}
-
-.demo-cta-actions .primary-button,
-.demo-cta-actions .secondary-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 32px;
-  margin: 0;
-  box-sizing: border-box;
-  line-height: 1.2;
-}
-
 .readme-section {
-  margin-bottom: 32px;
-  padding-top: 4px;
-  border-top: 1px solid var(--dbx-border);
-}
-
-.readme-section:first-of-type {
-  border-top: none;
-  padding-top: 0;
+  margin: 0 0 36px;
+  padding: 0;
+  border: none;
 }
 
 .readme-section h2 {
-  margin: 0 0 10px;
-  font-size: 16px;
+  margin: 0 0 8px;
+  font-size: 18px;
   font-weight: 650;
-  letter-spacing: 0;
+  letter-spacing: -0.02em;
 }
 
-.readme-section > p {
-  margin: 0 0 12px;
+.readme-lead {
+  margin: 0 0 14px;
+  max-width: 54ch;
   color: var(--dbx-secondary);
   line-height: 1.5;
 }
 
-.readme-section > p.muted {
-  margin-top: 12px;
-  font-size: 13px;
-}
-
-.readme-steps,
-.readme-list {
-  margin: 0;
-  padding-left: 1.2rem;
+.readme-cta {
   display: grid;
   gap: 10px;
+  max-width: 520px;
+}
+
+.readme-cta .feature-card {
+  min-height: 72px;
+}
+
+.readme-secondary-link {
+  color: var(--dbx-blue);
+  font-weight: 600;
+  font-size: 13px;
+  width: fit-content;
+}
+
+.readme-secondary-link:hover {
+  text-decoration: underline;
+}
+
+.readme-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.readme-steps li {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  gap: 10px;
+  align-items: start;
   color: var(--dbx-secondary);
   line-height: 1.5;
 }
 
-.readme-steps li,
-.readme-list li {
-  padding-left: 0.2rem;
+.readme-step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-top: 0;
+  border: 1px solid var(--dbx-border);
+  border-radius: 2px;
+  background: var(--dbx-bg-soft);
+  color: var(--dbx-muted);
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1;
 }
 
-.readme-list strong {
+.readme-steps a {
+  color: var(--dbx-blue);
+  font-weight: 600;
+}
+
+.readme-steps a:hover {
+  text-decoration: underline;
+}
+
+.readme-footnote {
+  margin: 14px 0 0;
+  color: var(--dbx-muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.readme-defs {
+  margin: 0;
+  display: grid;
+  gap: 14px;
+}
+
+.readme-defs > div {
+  display: grid;
+  gap: 2px;
+}
+
+.readme-defs dt {
+  margin: 0;
   color: var(--dbx-text);
   font-weight: 650;
 }
 
-.readme-section code {
-  font-size: 12px;
-  background: var(--dbx-bg-soft);
-  border: 1px solid var(--dbx-border);
-  border-radius: 2px;
-  padding: 1px 5px;
+.readme-defs dd {
+  margin: 0;
+  color: var(--dbx-secondary);
+  line-height: 1.5;
+  max-width: 58ch;
 }
 
 .file-type {
